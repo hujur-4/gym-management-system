@@ -1,0 +1,38 @@
+#form{
+    padding:40px;
+    display:flex;
+    align-items:center;
+}
+#par{
+    display:flex;
+    width:800px;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 0 15px rgba(0,0,0,.2);
+    overflow:hidden;
+}
+
+input{
+    margin: 10px 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 230px;
+}
+#buta{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+#but,#lwg{
+    width:92%;
+    padding:12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    background-color:skyblue ;
+}
+#forg{
+    padding-left: 170px;
+}
