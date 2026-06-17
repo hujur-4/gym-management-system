@@ -93,6 +93,34 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
+// Change Password Route
+app.post("/api/change-password", async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    if (!email || !newPassword) {
+      return res.status(400).json({ message: "Email and New Password are required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "Email not found in database" });
+    }
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Change Password Error:", error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // Connect to MongoDB and start server
 mongoose
   .connect(MONGO_URI)
