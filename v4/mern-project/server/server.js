@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 const User = require("./models/User");
-const Member = require("./models/Member"); // create this model file as described
+
 const app = express();
 
 // Middleware
@@ -25,8 +25,6 @@ if (!MONGO_URI) {
 app.get("/", (req, res) => {
   res.send("Backend Server is Running");
 });
-
-// --- Auth Routes ---
 
 // Login Route
 app.post("/api/login", async (req, res) => {
@@ -68,19 +66,24 @@ app.post("/api/register", async (req, res) => {
   try {
     const { fullname, email, password } = req.body;
 
+    // Check if all fields are provided
     if (!fullname || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Check existing user by email
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
+    // Hash password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    // Create user
     const newUser = new User({ fullname, email, password: hashedPassword });
+
     await newUser.save();
 
     return res.status(201).json({ message: "User Registered Successfully" });
@@ -94,85 +97,27 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/change-password", async (req, res) => {
   try {
     const { email, newPassword } = req.body;
+
     if (!email || !newPassword) {
-      return res.status(400).json({ message: "Email and new password are required" });
+      return res.status(400).json({ message: "Email and New Password are required" });
     }
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (!user) {
+      return res.status(400).json({ message: "Email not found in database" });
+    }
 
     const saltRounds = 10;
-    user.password = await bcrypt.hash(newPassword, saltRounds);
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    user.password = hashedPassword;
     await user.save();
 
-    return res.json({ message: "Password updated successfully" });
-  } catch (err) {
-    console.error("Change password error:", err);
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Change Password Error:", error);
     return res.status(500).json({ message: "Server Error" });
-  }
-});
-
-// --- Member CRUD Routes ---
-
-// Create member
-app.post("/api/members", async (req, res) => {
-  try {
-    const member = new Member(req.body);
-    await member.save();
-    res.status(201).json(member);
-  } catch (err) {
-    console.error("Create member error:", err);
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// Get all members
-app.get("/api/members", async (req, res) => {
-  try {
-    const members = await Member.find().sort({ createdAt: -1 });
-    res.json(members);
-  } catch (err) {
-    console.error("Get members error:", err);
-    res.status(500).json({ message: "Server Error" });
-  }
-});
-
-// Get single member
-app.get("/api/members/:id", async (req, res) => {
-  try {
-    const member = await Member.findById(req.params.id);
-    if (!member) return res.status(404).json({ message: "Member not found" });
-    res.json(member);
-  } catch (err) {
-    console.error("Get member error:", err);
-    res.status(500).json({ message: "Server Error" });
-  }
-});
-
-// Update member
-app.put("/api/members/:id", async (req, res) => {
-  try {
-    const member = await Member.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!member) return res.status(404).json({ message: "Member not found" });
-    res.json(member);
-  } catch (err) {
-    console.error("Update member error:", err);
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// Delete member
-app.delete("/api/members/:id", async (req, res) => {
-  try {
-    const member = await Member.findByIdAndDelete(req.params.id);
-    if (!member) return res.status(404).json({ message: "Member not found" });
-    res.json({ message: "Member deleted" });
-  } catch (err) {
-    console.error("Delete member error:", err);
-    res.status(500).json({ message: "Server Error" });
   }
 });
 
@@ -180,9 +125,9 @@ app.delete("/api/members/:id", async (req, res) => {
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log("MongoDB Connected Successfully:", mongoose.connection.name);
+    console.log("MongoDB Connected Successfully");
     app.listen(PORT, () => {
-      console.log(Server running on port ${PORT});
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {

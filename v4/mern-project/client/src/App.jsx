@@ -55,7 +55,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import ChangePassword from "./pages/ChangePassword";
+import MembershipDetails from "./pages/MembershipDetails";
+import Members from "./pages/Members";
+import ChangePassword from "./pages/Changepassword";
 
 function App() {
   return (
@@ -67,9 +69,15 @@ function App() {
 
         {/* Register Page */}
         <Route path="/register" element={<Register />} />
-        
+
         {/* Dashboard Page */}
         <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Members List Page */}
+        <Route path="/members" element={<Members />} />
+
+        {/* Member Details Page */}
+        <Route path="/members/:id" element={<MembershipDetails />} />
 
         {/* Change Password Page */}
         <Route

@@ -4,3 +4,5 @@ v2/backend/node_modules/
 v2/my-app/node_modules/
 v3/client/node_modules/
 v3/server/node_modules/
+v4/mern-project/client/node_modules
+v4/mern-project/server/node_modules
