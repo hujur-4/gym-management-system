@@ -33,8 +33,7 @@ function Changepassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      const text = await res.json()
-      console.log(text);
+      const data = await res.json();
 
       if (res.ok) {
         alert(data.message || "Password updated successfully");
@@ -96,6 +95,7 @@ function Changepassword() {
                 {submitting ? "Updating..." : "Update Password"}
               </button>
             </form>
+
             <p className="text-center mt-3">
               Remember your password? <Link to="/">Login Here</Link>
             </p>
