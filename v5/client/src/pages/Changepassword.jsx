@@ -75,6 +75,7 @@ function Changepassword() {
                   placeholder="Enter Registered Email"
                   value={formData.email}
                   onChange={handleChange}
+                  autoComplete="email"
                   required
                 />
               </div>
@@ -88,6 +89,7 @@ function Changepassword() {
                   placeholder="Enter New Password"
                   value={formData.newPassword}
                   onChange={handleChange}
+                  autoComplete="new-password"
                   required
                 />
               </div>

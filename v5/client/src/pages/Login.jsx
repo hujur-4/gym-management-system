@@ -42,9 +42,9 @@ function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
         alert("Login Successful");
-        navigate("/Dashboard");
+        navigate("/dashboard");
       } else {
         alert(data.message || "Invalid Credentials");
       }
@@ -100,6 +100,7 @@ function Login() {
                   placeholder="Enter Email"
                   value={formData.email}
                   onChange={handleChange}
+                  autoComplete="email"
                   required
                 />
               </div>
@@ -115,6 +116,7 @@ function Login() {
                   placeholder="Enter Password"
                   value={formData.password}
                   onChange={handleChange}
+                  autoComplete="current-password"
                   required
                 />
 
