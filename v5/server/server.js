@@ -3,10 +3,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
-
+const jwt = require("jsonwebtoken");
 const User = require("./models/User");
-const Member = require("./models/Member"); // create this model file as described
-const jwt=require("jsonwebtoken");
+
 const app = express();
 
 // Middleware
@@ -26,8 +25,6 @@ if (!MONGO_URI) {
 app.get("/", (req, res) => {
   res.send("Backend Server is Running");
 });
-
-// --- Auth Routes ---
 
 // Login Route
 app.post("/api/login", async (req, res) => {
@@ -49,7 +46,7 @@ app.post("/api/login", async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid Email or Password" });
     }
-    const token = jwt.sign(
+      const token = jwt.sign(
             { id: user.id, email: user.email },
             process.env.JWT_SECRET, 
             { expiresIn: "1d" }    
@@ -60,8 +57,7 @@ app.post("/api/login", async (req, res) => {
         id: user._id,
         fullname: user.fullname,
         email: user.email,
-      },
-      token 
+      },token
     });
   } catch (error) {
     console.error(error);
@@ -74,19 +70,24 @@ app.post("/api/register", async (req, res) => {
   try {
     const { fullname, email, password } = req.body;
 
+    // Check if all fields are provided
     if (!fullname || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Check existing user by email
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
+    // Hash password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    // Create user
     const newUser = new User({ fullname, email, password: hashedPassword });
+
     await newUser.save();
 
     return res.status(201).json({ message: "User Registered Successfully" });
@@ -96,67 +97,31 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// --- Member CRUD Routes ---
-
-// Create member
-app.post("/api/members", async (req, res) => {
+// Change Password Route
+app.post("/api/change-password", async (req, res) => {
   try {
-    const member = new Member(req.body);
-    await member.save();
-    res.status(201).json(member);
-  } catch (err) {
-    console.error("Create member error:", err);
-    res.status(400).json({ message: err.message });
-  }
-});
+    const { email, newPassword } = req.body;
 
-// Get all members
-app.get("/api/members", async (req, res) => {
-  try {
-    const members = await Member.find().sort({ createdAt: -1 });
-    res.json(members);
-  } catch (err) {
-    console.error("Get members error:", err);
-    res.status(500).json({ message: "Server Error" });
-  }
-});
+    if (!email || !newPassword) {
+      return res.status(400).json({ message: "Email and New Password are required" });
+    }
 
-// Get single member
-app.get("/api/members/:id", async (req, res) => {
-  try {
-    const member = await Member.findById(req.params.id);
-    if (!member) return res.status(404).json({ message: "Member not found" });
-    res.json(member);
-  } catch (err) {
-    console.error("Get member error:", err);
-    res.status(500).json({ message: "Server Error" });
-  }
-});
+    const user = await User.findOne({ email });
 
-// Update member
-app.put("/api/members/:id", async (req, res) => {
-  try {
-    const member = await Member.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!member) return res.status(404).json({ message: "Member not found" });
-    res.json(member);
-  } catch (err) {
-    console.error("Update member error:", err);
-    res.status(400).json({ message: err.message });
-  }
-});
+    if (!user) {
+      return res.status(400).json({ message: "Email not found in database" });
+    }
 
-// Delete member
-app.delete("/api/members/:id", async (req, res) => {
-  try {
-    const member = await Member.findByIdAndDelete(req.params.id);
-    if (!member) return res.status(404).json({ message: "Member not found" });
-    res.json({ message: "Member deleted" });
-  } catch (err) {
-    console.error("Delete member error:", err);
-    res.status(500).json({ message: "Server Error" });
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Change Password Error:", error);
+    return res.status(500).json({ message: "Server Error" });
   }
 });
 
@@ -164,7 +129,7 @@ app.delete("/api/members/:id", async (req, res) => {
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log("MongoDB Connected Successfully:", mongoose.connection.name);
+    console.log("MongoDB Connected Successfully");
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
