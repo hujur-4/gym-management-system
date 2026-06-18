@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const User = require("./models/User");
+const Member = require("./models/Member");
 
 const app = express();
 
@@ -122,6 +123,79 @@ app.post("/api/change-password", async (req, res) => {
   } catch (error) {
     console.error("Change Password Error:", error);
     return res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// ── Member CRUD Routes ─────────────────────────────────────────────────────
+
+// GET all members
+app.get("/api/members", async (req, res) => {
+  try {
+    const members = await Member.find().sort({ createdAt: -1 });
+    res.json(members);
+  } catch (error) {
+    console.error("Get members error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// GET single member
+app.get("/api/members/:id", async (req, res) => {
+  try {
+    const member = await Member.findById(req.params.id);
+    if (!member) return res.status(404).json({ message: "Member not found" });
+    res.json(member);
+  } catch (error) {
+    console.error("Get member error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// POST create member
+app.post("/api/members", async (req, res) => {
+  try {
+    const { fullname, email, phone, membershipType, membershipStartDate, membershipEndDate, status, notes } = req.body;
+    if (!fullname || !email) {
+      return res.status(400).json({ message: "Full name and email are required" });
+    }
+    const existing = await Member.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ message: "A member with this email already exists" });
+    }
+    const member = new Member({ fullname, email, phone, membershipType, membershipStartDate, membershipEndDate, status, notes });
+    await member.save();
+    res.status(201).json(member);
+  } catch (error) {
+    console.error("Create member error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// PUT update member
+app.put("/api/members/:id", async (req, res) => {
+  try {
+    const member = await Member.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!member) return res.status(404).json({ message: "Member not found" });
+    res.json(member);
+  } catch (error) {
+    console.error("Update member error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+// DELETE member
+app.delete("/api/members/:id", async (req, res) => {
+  try {
+    const member = await Member.findByIdAndDelete(req.params.id);
+    if (!member) return res.status(404).json({ message: "Member not found" });
+    res.json({ message: "Member deleted successfully" });
+  } catch (error) {
+    console.error("Delete member error:", error);
+    res.status(500).json({ message: "Server Error" });
   }
 });
 

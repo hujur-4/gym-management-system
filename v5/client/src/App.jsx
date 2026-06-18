@@ -60,17 +60,6 @@ import Members from "./pages/Members";
 import ChangePassword from "./pages/Changepassword";
 import ProtectNav from "./pages/protectedNavigaton";
 function App() {
-  const token=localStorage.getItem("token");
-//  if(token){
-  //      <Route path="/dashboard" element={<Dashboard />} />
-
-        {/* Members List Page */}
-        //<Route path="/members" element={<Members />} />
-
-      //  {/* Member Details Page */}
-    //    <Route path="/members/:id" element={<MembershipDetails />} />
-
-  //}
   return (
     <BrowserRouter>
       <Routes>

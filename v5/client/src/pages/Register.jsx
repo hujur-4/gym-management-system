@@ -102,6 +102,7 @@ function Register() {
                 placeholder="Enter Full Name"
                 value={user.fullname}
                 onChange={handleChange}
+                autoComplete="name"
               />
             </div>
 
@@ -116,6 +117,7 @@ function Register() {
                 placeholder="Enter Email"
                 value={user.email}
                 onChange={handleChange}
+                autoComplete="email"
               />
             </div>
 
@@ -130,6 +132,7 @@ function Register() {
                 placeholder="Enter Password"
                 value={user.password}
                 onChange={handleChange}
+                autoComplete="new-password"
               />
             </div>
 
@@ -144,6 +147,7 @@ function Register() {
                 placeholder="Confirm Password"
                 value={user.confirmPassword}
                 onChange={handleChange}
+                autoComplete="new-password"
               />
             </div>
 
