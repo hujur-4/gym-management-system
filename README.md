@@ -94,7 +94,6 @@ gym-management-system/
 │
 └── README.md
 
-![alt text](image.png)
 ---
 
 ## ⚙️ Installation
