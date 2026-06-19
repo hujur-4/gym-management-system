@@ -72,6 +72,7 @@ Administrators can manage users, monitor fitness data, oversee diet and workout 
 
 ## 📂 Project Structure
 
+```
 gym-management-system/
 │
 ├── client/
@@ -93,6 +94,7 @@ gym-management-system/
 │   └── package.json
 │
 └── README.md
+```
 
 ---
 
