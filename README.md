@@ -93,6 +93,8 @@ gym-management-system/
 │   └── package.json
 │
 └── README.md
+
+![alt text](image.png)
 ---
 
 ## ⚙️ Installation
