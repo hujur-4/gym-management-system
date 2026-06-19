@@ -1,9 +1,8 @@
 # 🏋️ Gym Management System
-
-Gym Management System is a full-stack fitness management application built with the MERN Stack (MongoDB, Express.js, React.js, and Node.js).
-It provides BMI-based health analysis, personalized diet recommendations, and customized workout plans for users.
-Members can track their fitness progress through an interactive and user-friendly dashboard.
-Administrators can manage users, monitor fitness data, and oversee gym operations through a centralized analytics panel.
+Gym Management System is a full-stack fitness management application built using the MERN Stack (MongoDB, Express.js, React.js, and Node.js).
+It calculates user BMI and provides personalized diet recommendations based on fitness goals.
+The system suggests customized workout plans and helps users track their fitness progress through an interactive dashboard.
+Administrators can manage users, monitor fitness data, oversee diet and workout plans, and access gym analytics efficiently.
 
 ## 🚀 Features
 
