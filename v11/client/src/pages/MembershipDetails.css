@@ -1,0 +1,135 @@
+/* Page Background */
+.member-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #111827);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 20px 40px;
+}
+
+/* Card */
+.member-card {
+  width: 100%;
+  max-width: 650px;
+  background: #1e293b;
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+/* Title */
+.member-title {
+  text-align: center;
+  color: #22c55e;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+/* Form */
+.member-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  color: #e5e7eb;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select {
+  background: #0f172a;
+  color: white;
+  border: 2px solid #334155;
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.save-btn {
+  flex: 1;
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.save-btn:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  flex: 1;
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cancel-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Loading */
+.member-loading {
+  min-height: 100vh;
+  background: #111827;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.member-loading h3 {
+  color: #22c55e;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .member-card {
+    padding: 25px;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .member-title {
+    font-size: 1.6rem;
+  }
+}
